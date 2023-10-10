@@ -1,4 +1,4 @@
-import {useCallback, useEffect} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import { Button, Input, RTE, Select } from "../index";
 import {service} from "../../appwrite/config.js";
@@ -17,6 +17,7 @@ export function PostForm({post}) {
 
     const navigate = useNavigate();
     const userData = useSelector((state) => state.auth.userData);
+
 
     const submit = async (data) => {
         if (post) {
@@ -41,7 +42,6 @@ export function PostForm({post}) {
                 }
             }
         }
-        console.log(data);
     }
 
     const slugTransform = useCallback((value) => {
@@ -57,14 +57,20 @@ export function PostForm({post}) {
         }
     }, [])
 
+    const [subscription, setSubscription] = useState(null);
+
     useEffect(() => {
-        const subscription = watch((value, {name}) => {
+        const newSubscription = watch((value, {name}) => {
             if (name === "title") {
                 setValue("slug", slugTransform(value.title), {shouldValidate: true});
             }
         });
 
-        return () => subscription.unsubscribe();
+        setSubscription(newSubscription);
+
+        return () => {
+            if (subscription) subscription.unsubscribe();
+        }
 
     }, [watch, slugTransform, setValue]);
 
