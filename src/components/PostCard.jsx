@@ -8,7 +8,7 @@ export function PostCard({$id, title, featuredImage, content}) {
             <div className="w-full bg-gray-100 rounded-xl p-4">
                 <div className="w-full justify-center mb-4">
                     <img src={service.getFilePreview(featuredImage)} alt={title}
-                         className="rounded-xl"/>
+                         className="rounded-xl" loading={"lazy"}/>
                 </div>
                 <h2 className="text-xl font-bold">{title}</h2>
                 <p className="mt-2 line-clamp-3 text-sm/relaxed text-gray-500">
